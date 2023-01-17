@@ -1,0 +1,24 @@
+{
+  "name": "whalebot",
+  "version": "1.0.0",
+  "description": "Discord bot that tracks weight updates.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Merctron/WhaleBot.git"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/Merctron/WhaleBot/issues"
+  },
+  "homepage": "https://github.com/Merctron/WhaleBot#readme",
+  "dependencies": {
+    "body-parser": "^1.20.1",
+    "eris": "^0.17.1",
+    "express": "^4.18.2"
+  }
+}
