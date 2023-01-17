@@ -1,0 +1,4 @@
+artifacts:
+  files:
+    - appspec.yml
+    - scripts/start_bot
