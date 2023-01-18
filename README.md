@@ -7,7 +7,7 @@ WhaleBot is a Discord bot that provides inspirational quotes and helps you track
 WhaleBot supports the following commands:
 
 ```
-@Whalebot recordWeight
+@Whalebot recordWeight <weight>
 @Whalebot stats
 @Whalebot inspire
 @Whalebot help
@@ -28,9 +28,9 @@ WhaleBot will support the following features in the future:
 
 ## Bot Architecture
 
-The bot runs on a single micro EC2 instance and makes use of GitHub actions and AWS CodeDeploy to deploy any changes into the `mainline` branch.
-
-Since the bot is light-weight and serves one personal server, [`pm2`](https://pm2.keymetrics.io/) is used for process management with no load-balancing set up.
+* The bot runs on a single micro EC2 instance and makes use of GitHub actions and AWS CodeDeploy to deploy any changes into the `main` branch.
+* The bot makes use of SQLite for its tracking functionality and creates a DB file in the `$HOME` directory of the host it is running on. This may change in the future if scaling is a concern to a hosted SQL/noSQL data store. At present the SQLite use makes developing, and forking/deploying a new instance trivial for lightweight use.
+* Since the bot is light-weight and serves one personal Discord server, [`pm2`](https://pm2.keymetrics.io/) is used for process management with no load-balancing set up.
 
 ## Contributing
 
