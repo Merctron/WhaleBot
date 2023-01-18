@@ -1,4 +1,4 @@
-# WhaleBot
+# WhaleBot 🐋
 
 WhaleBot is a Discord bot that provides inspirational quotes and helps you track weight. It was inspired by the character Charlie from the movie 'The Whale'.
 
