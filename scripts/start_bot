@@ -4,6 +4,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+sudo chmod -R 777 $HOME/WhaleBot
 
 # Configure the version of Node.js to use
 nvm use 16
@@ -19,5 +20,4 @@ cd $HOME/WhaleBot
 npm i
 
 # Shut down previous bot process if any and start a new one
-pm2 stop WhaleBot
-pm2 start node index.js --name "WhaleBot"
+pm2 delete WhaleBot || : && pm2 start node index.js --name "WhaleBot"
