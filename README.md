@@ -7,6 +7,8 @@ WhaleBot is a Discord bot that provides inspirational quotes and helps you track
 WhaleBot supports the following commands:
 
 ```
+@Whalebot recordWeight
+@Whalebot stats
 @Whalebot inspire
 @Whalebot help
 ```

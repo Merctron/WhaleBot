@@ -1,10 +1,15 @@
 import * as  eris from "eris";
 import { program } from "commander";
 import * as REPL from "repl";
+import sqlite3 from "sqlite3";
+
+const sqlite = sqlite3.verbose();
 
 const HELP_CMD    = "help";
 const INSPIRE_CMD = "inspire";
 const DEPRESS_CMD = "depress";
+const RECORD_WEIGHT_CMD = "recordWeight";
+const STATS_CMD = "stats";
 
 const INSPIRE_QUOTES = [
     "Do you ever get the feeling that people are incapable of not caring? People are amazing!",
@@ -24,7 +29,48 @@ const DEPRESS_QUOTES = [
 
 const ERR_MSG = `I could not understand you, but keep trying. Maybe type '@WhaleBot help'. You are amazing!`;
 
-function processMessage(msg) {
+function initDb() {
+    const db = new sqlite.Database(`${process.env.HOME}/.WhaleBot.db`);
+    db.serialize(() => {
+        db.run("CREATE TABLE IF NOT EXISTS weights (date TEXT PRIMARY KEY, username TEXT, weight REAL)");
+        db.close();
+    });
+}
+
+function recordWeight(username, weight) {
+    const db = new sqlite.Database(`${process.env.HOME}/.WhaleBot.db`);
+    db.serialize(() => {
+        const now = new Date();
+        const y = now.getFullYear();
+        const m = (now.getMonth() + 1) < 10 ? "0" + (now.getMonth() + 1) : (now.getMonth() + 1);
+        const d = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
+        const dateStr = `${y}${m}${d}`;
+
+        const query = `INSERT OR REPLACE INTO weights(username, date, weight) VALUES(?, ?, ?)`;
+        const stmt = db.prepare(query);
+
+        stmt.run(username, dateStr, Number.parseFloat(weight));
+        stmt.finalize();
+        db.close()
+    });
+}
+
+async function weightStats(username) {
+    return new Promise((res) => {
+        const db = new sqlite.Database(`${process.env.HOME}/.WhaleBot.db`);
+        db.serialize(() => {
+            const query = `SELECT * FROM weights WHERE username LIKE '${username}' ORDER BY weight DESC LIMIT 7`;
+
+            let result = "You last 7 weights are: ";
+            db.all(query, (err, rows) => {
+                res(`Last 7 weights: ${rows.map((row) => row.weight)}`);
+                db.close();
+            });
+        });
+    });
+}
+
+async function processMessage(msg) {
     try {
         console.log(`Processing msg(${msg.content}) from author ${msg.author.username}`)
         const commandComponents = msg.content.split(" ");
@@ -34,7 +80,7 @@ function processMessage(msg) {
         console.log(`Processing command: ${command}`);
 
         if (command === HELP_CMD) {
-            return "Hi I'm Charlie. I'm a work in progress. You can talk to me like this:\n\n'@Whalebot inspire'\n'@WhaleBot help'";
+            return "Hi I'm Charlie. I'm a work in progress. You can talk to me like this:\n\n'@Whalebot recordWeight <WEIGHT>'\n'@Whalebot stats'\n'@Whalebot inspire'\n'@WhaleBot help'";
         }
 
         if (command === INSPIRE_CMD) {
@@ -45,6 +91,16 @@ function processMessage(msg) {
             return DEPRESS_QUOTES[Math.floor(Math.random() * DEPRESS_QUOTES.length)];
         }
 
+        if (command === RECORD_WEIGHT_CMD) {
+            recordWeight(msg.author.username, args[0]);
+            return "I have recorded your progress friend.";
+        }
+
+        if (command === STATS_CMD) {
+            const result = await weightStats(msg.author.username);
+            return `Here are your stats friend. ${result}`;
+        }
+
         return ERR_MSG;
     } catch (err) {
         console.log(err);
@@ -52,21 +108,25 @@ function processMessage(msg) {
     }
 }
 
+initDb();
+
 // Run in REPL mode is the bot if the option is passed or attempt to connect to Discord
 program.option('--repl');
 
 program.parse();
 const { repl } = program.opts();
 
+(async () => {
+
 if (repl) {
-    REPL.start({ prompt: "WhaleBot => ", eval: (msg, context, filename, callback) => {
+    REPL.start({ prompt: "WhaleBot => ", eval: async (msg, context, filename, callback) => {
         const wrappedMsg = {
-            content: msg,
+            content: msg.trim(),
             author: {
                 username: "Liz"
             }
         }
-        callback(null, processMessage(wrappedMsg));
+        callback(null, await processMessage(wrappedMsg));
     }});
 } else {
     // Create a Client instance with our bot token.
@@ -88,7 +148,7 @@ if (repl) {
 
         if (botWasMentioned) {
             try {
-                const resp = processMessage(msg);
+                const resp = await processMessage(msg);
                 await msg.channel.createMessage(resp);
             } catch (err) {
                 console.warn('Failed to respond to mention.');
@@ -103,3 +163,5 @@ if (repl) {
 
     bot.connect();
 }
+
+})();
