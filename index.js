@@ -1,7 +1,6 @@
-const eris = require('eris');
-
-// Create a Client instance with our bot token.
-const bot = new eris.Client(process.env.WHALE_BOT_TOKEN);
+import * as  eris from "eris";
+import { program } from "commander";
+import * as REPL from "repl";
 
 const HELP_CMD    = "help";
 const INSPIRE_CMD = "inspire";
@@ -24,7 +23,6 @@ const DEPRESS_QUOTES = [
 ];
 
 const ERR_MSG = `I could not understand you, but keep trying. Maybe type '@WhaleBot help'. You are amazing!`;
-
 
 function processMessage(msg) {
     try {
@@ -54,33 +52,54 @@ function processMessage(msg) {
     }
 }
 
-// When the bot is connected and ready, log to console.
-bot.on('ready', () => {
-    console.log('Connected and ready.');
-});
+// Run in REPL mode is the bot if the option is passed or attempt to connect to Discord
+program.option('--repl');
 
-// Every time a message is sent anywhere the bot is present,
-// this event will fire and we will check if the bot was mentioned.
-// If it was, the bot will attempt to respond with "Present".
-bot.on('messageCreate', async (msg) => {
+program.parse();
+const { repl } = program.opts();
 
-    const botWasMentioned = msg.mentions.find(
-        mentionedUser => mentionedUser.id === bot.user.id,
-    );
-
-    if (botWasMentioned) {
-        try {
-            const resp = processMessage(msg);
-            await msg.channel.createMessage(resp);
-        } catch (err) {
-            console.warn('Failed to respond to mention.');
-            console.warn(err);
+if (repl) {
+    REPL.start({ prompt: "WhaleBot => ", eval: (msg, context, filename, callback) => {
+        const wrappedMsg = {
+            content: msg,
+            author: {
+                username: "Liz"
+            }
         }
-    }
-});
+        callback(null, processMessage(wrappedMsg));
+    }});
+} else {
+    // Create a Client instance with our bot token.
+    const bot = new eris.Client(process.env.WHALE_BOT_TOKEN);
 
-bot.on('error', err => {
-    console.warn(err);
-});
+    // When the bot is connected and ready, log to console.
+    bot.on('ready', () => {
+        console.log('Connected and ready.');
+    });
 
-bot.connect();
+    // Every time a message is sent anywhere the bot is present,
+    // this event will fire and we will check if the bot was mentioned.
+    // If it was, the bot will attempt to respond with "Present".
+    bot.on('messageCreate', async (msg) => {
+
+        const botWasMentioned = msg.mentions.find(
+            mentionedUser => mentionedUser.id === bot.user.id,
+        );
+
+        if (botWasMentioned) {
+            try {
+                const resp = processMessage(msg);
+                await msg.channel.createMessage(resp);
+            } catch (err) {
+                console.warn('Failed to respond to mention.');
+                console.warn(err);
+            }
+        }
+    });
+
+    bot.on('error', err => {
+        console.warn(err);
+    });
+
+    bot.connect();
+}

@@ -11,6 +11,12 @@ WhaleBot supports the following commands:
 @Whalebot help
 ```
 
+You can also run Whale bot in REPL mode (if you want to mess with it locally or test during development) like so:
+
+```
+npm i && npm run dev
+```
+
 ## Planned Features
 
 WhaleBot will support the following features in the future:

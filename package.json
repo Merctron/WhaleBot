@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "Discord bot that tracks weight updates.",
   "main": "index.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "node index.js --repl"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   "homepage": "https://github.com/Merctron/WhaleBot#readme",
   "dependencies": {
     "body-parser": "^1.20.1",
+    "commander": "^10.0.0",
     "eris": "^0.17.1",
     "express": "^4.18.2"
   }
