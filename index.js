@@ -5,6 +5,7 @@ const bot = new eris.Client(process.env.WHALE_BOT_TOKEN);
 
 const HELP_CMD    = "help";
 const INSPIRE_CMD = "inspire";
+const DEPRESS_CMD = "depress";
 
 const INSPIRE_QUOTES = [
     "Do you ever get the feeling that people are incapable of not caring? People are amazing!",
@@ -13,7 +14,13 @@ const INSPIRE_QUOTES = [
     "You don’t have to be angry at the whole world. You can just be mad at me.",
     "I need to know that I have done one thing right with my life!",
     "These assignments don’t matter, this course doesn’t matter, college doesn’t matter. These amazing, honest, things that you wrote, they matter!",
-    "You’re the best thing I’ve ever done",
+    "You’re the best thing I’ve ever done.",
+];
+
+const DEPRESS_QUOTES = [
+    "I am grotesque. Say it!",
+    "Who would ever want me to be part of their life?",
+    "I'm sorry Liz.",
 ];
 
 const ERR_MSG = `I could not understand you, but keep trying. Maybe type '@WhaleBot help'. You are amazing!`;
@@ -34,6 +41,10 @@ function processMessage(msg) {
 
         if (command === INSPIRE_CMD) {
             return INSPIRE_QUOTES[Math.floor(Math.random() * INSPIRE_QUOTES.length)];
+        }
+
+        if (command === DEPRESS_CMD) {
+            return DEPRESS_QUOTES[Math.floor(Math.random() * DEPRESS_QUOTES.length)];
         }
 
         return ERR_MSG;
