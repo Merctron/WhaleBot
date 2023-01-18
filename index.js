@@ -1,7 +1,7 @@
 const eris = require('eris');
 
 // Create a Client instance with our bot token.
-const bot = new eris.Client('MTA2NDcyNDcxMzA4OTI2OTgxMA.G9_RoK.sJ4uwzPMOTqx2zk6--rrsvP4L-Rmkd8f2550V8');
+const bot = new eris.Client(process.env.WHALE_BOT_TOKEN);
 
 const HELP_CMD    = "help";
 const INSPIRE_CMD = "inspire";

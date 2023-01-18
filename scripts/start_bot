@@ -1,19 +1,23 @@
 #!/bin/bash
 
-pwd
-
-export NVM_DIR="/home/ec2-user/.nvm"
+export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
+
+# Configure the version of Node.js to use
 nvm use 16
 
+# Make sure pm2 is installed to manage the bot process
 npm install pm2@latest -g
 
-cd /home/ec2-user/WhaleBot
+# Load bot credentials - we will improve this with better credential management in the future
+source $HOME/credentials/WhaleBot.sh
 
-pwd
-
+# Navigate to bot project root and install deps
+cd $HOME/WhaleBot
 npm i
+
+# Shut down previous bot process if any and start a new one
 pm2 stop WhaleBot
 pm2 start node index.js --name "WhaleBot"

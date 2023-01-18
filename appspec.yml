@@ -7,4 +7,4 @@ hooks:
   ApplicationStart:
    - location: scripts/start_bot
      timeout: 300
-     runas: root
+     runas: ec2-user
