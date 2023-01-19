@@ -32,7 +32,7 @@ const ERR_MSG = `I could not understand you, but keep trying. Maybe type '@Whale
 function initDb() {
     const db = new sqlite.Database(`${process.env.HOME}/.WhaleBot.db`);
     db.serialize(() => {
-        db.run("CREATE TABLE IF NOT EXISTS weights (date TEXT PRIMARY KEY, username TEXT, weight REAL)");
+        db.run("CREATE TABLE IF NOT EXISTS userweights (dateanduser TEXT PRIMARY KEY, date TEXT, username TEXT, weight REAL)");
         db.close();
     });
 }
@@ -45,11 +45,12 @@ function recordWeight(username, weight) {
         const m = (now.getMonth() + 1) < 10 ? "0" + (now.getMonth() + 1) : (now.getMonth() + 1);
         const d = now.getDate() < 10 ? "0" + now.getDate() : now.getDate();
         const dateStr = `${y}${m}${d}`;
+        const primaryKey = `${dateStr}-${username}`;
 
-        const query = `INSERT OR REPLACE INTO weights(username, date, weight) VALUES(?, ?, ?)`;
+        const query = `INSERT OR REPLACE INTO userweights(dateanduser, date, username, weight) VALUES(?, ?, ?, ?)`;
         const stmt = db.prepare(query);
 
-        stmt.run(username, dateStr, Number.parseFloat(weight));
+        stmt.run(primaryKey, dateStr, username, Number.parseFloat(weight));
         stmt.finalize();
         db.close()
     });
@@ -59,7 +60,7 @@ async function weightStats(username) {
     return new Promise((res) => {
         const db = new sqlite.Database(`${process.env.HOME}/.WhaleBot.db`);
         db.serialize(() => {
-            const query = `SELECT * FROM weights WHERE username LIKE '${username}' ORDER BY weight DESC LIMIT 7`;
+            const query = `SELECT * FROM userweights WHERE username LIKE '${username}' ORDER BY date DESC LIMIT 7`;
 
             let result = "You last 7 weights are: ";
             db.all(query, (err, rows) => {
