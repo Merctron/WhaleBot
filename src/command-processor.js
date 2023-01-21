@@ -13,7 +13,7 @@ import {
 
 
 function averageWeight(weights) {
-    return (weights.reduce((a, b) => a + b, 0) / weights.length).toPrecision(3);
+    return (weights.reduce((a, b) => a + b, 0) / weights.length).toPrecision(5);
 }
 
 export async function processMessage(msg) {
