@@ -37,6 +37,11 @@ function initDb() {
     });
 }
 
+async function averageWeight(weights){
+    return new Promise((average) => {
+        average(weights.reduce((a, b) => a + b, 0) / weights.length);
+    });
+}
 function recordWeight(username, weight) {
     const db = new sqlite.Database(`${process.env.HOME}/.WhaleBot.db`);
     db.serialize(() => {
@@ -62,9 +67,9 @@ async function weightStats(username) {
         db.serialize(() => {
             const query = `SELECT * FROM userweights WHERE username LIKE '${username}' ORDER BY date DESC LIMIT 7`;
 
-            let result = "You last 7 weights are: ";
+            // let result = "You last 7 weights are: ";
             db.all(query, (err, rows) => {
-                res(`Last 7 weights: ${rows.map((row) => row.weight)}`);
+                res(rows.map((row) => row.weight));
                 db.close();
             });
         });
@@ -98,8 +103,9 @@ async function processMessage(msg) {
         }
 
         if (command === STATS_CMD) {
-            const result = await weightStats(msg.author.username);
-            return `Here are your stats friend. ${result}`;
+            const pastWeights = await weightStats(msg.author.username);
+            const average = await averageWeight(pastWeights)
+            return `Past Weights: ${pastWeights} Average: ${average}`;
         }
 
         return ERR_MSG;
