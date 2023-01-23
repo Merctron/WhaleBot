@@ -8,7 +8,8 @@ export const INSERT_USER_WEIGHTS_TABLE =
     " VALUES(?, ?, ?, ?)";
 export const SELECT_USER_WEIGHTS_TABLE =
     "SELECT * FROM userweights WHERE username LIKE ? ORDER BY date DESC LIMIT 7";
-
+export const SELECT_USER_BIWEEKLY_AVERAGE =
+    "SELECT * FROM userweights WHERE username LIKE ? ORDER BY date DESC LIMIT 14";
 // Command Labels
 export const HELP_CMD    = "help";
 export const INSPIRE_CMD = "inspire";

@@ -36,8 +36,18 @@ export async function processMessage(msg) {
                 return "I have recorded your progress friend.";
             case STATS_CMD:
                 const pastWeights = await weightStats(msg.author.username);
-                const average = await averageWeight(pastWeights);
-                return `Past 7 Weights: ${pastWeights}\n7 Day Average: ${average}`;
+                const reversedWeights = pastWeights.reverse()
+                const currentAvg = averageWeight(reversedWeights.slice(-7));
+                const lastAvg = averageWeight(reversedWeights.slice(0,7));
+                const average = averageWeight(reversedWeights.slice(-7));
+                const averageDifference = (lastAvg - currentAvg).toPrecision(5);
+                let direction;
+                if (averageDifference <= 0) {
+                    direction = "Gained";
+                  } else {
+                    direction = "Lost";
+                  }
+                return `Past 7 Weights: ${pastWeights} lbs.\n7 Day Average: ${average} lbs.\nAverage difference: ${direction} ${averageDifference} lbs.`;
         }
 
         return ERR_MSG;
