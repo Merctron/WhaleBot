@@ -4,6 +4,7 @@ import {
     CREATE_USER_WEIGHTS_TABLE,
     INSERT_USER_WEIGHTS_TABLE,
     SELECT_USER_WEIGHTS_TABLE,
+    SELECT_USER_BIWEEKLY_AVERAGE,
 } from "./constants.js";
 
 const sqlite = sqlite3.verbose();
@@ -38,7 +39,7 @@ export async function weightStats(username) {
     return new Promise((res) => {
         const db = new sqlite.Database(DB_LOCATION);
         db.serialize(() => {
-            db.all(SELECT_USER_WEIGHTS_TABLE, username, (err, rows) => {
+            db.all(SELECT_USER_BIWEEKLY_AVERAGE, username, (err, rows) => {
                 res(rows.map((row) => row.weight));
                 db.close();
             });
