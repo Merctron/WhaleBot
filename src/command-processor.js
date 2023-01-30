@@ -43,24 +43,25 @@ export async function processMessage(msg) {
                 return "I have recorded your progress friend.";
             case STATS_CMD:
                 const stats = new Object()
-                const pastWeights = await weightStats(msg.author.username);
-                const numberWeights = pastWeights.length;
-                const lastAvg = averageWeight(pastWeights.slice(-7));
-                const currentAvg = averageWeight(pastWeights.slice(0,7));
-                const averageDifference = (lastAvg - currentAvg).toPrecision(5);
-                if (numberWeights <= 7){
-                    stats['weights'] = `Past ${numberWeights} Weights: ${pastWeights.slice(0,7)} lbs.`;
+                const data = await weightStats(msg.author.username);
+                const currWeights = data['currWeights']
+                const pastWeights = data['pastWeights']
+                const numberWeights = currWeights.length;
+                const currentAvg = averageWeight(currWeights);
+
+                if (pastWeights.length == 0){
+                    stats['weights'] = `Past ${numberWeights} Weights: ${currWeights.slice(0,7)} lbs.`;
                     stats['average'] = `${numberWeights} Day Average: ${currentAvg} lbs.`;
                 }
-                else if (7 < numberWeights & numberWeights < 14){
-                    stats['weights'] = `Past 7 Weights: ${pastWeights.slice(0,7)} lbs.`;
-                    stats['average'] = `7 Day Average: ${currentAvg} lbs.`;
-                }else{
-                    stats['weights'] = `Past 7 Weights: ${pastWeights.slice(0,7)} lbs.`;
+                else{
+                    const lastAvg = averageWeight(pastWeights);
+                    let averageDifference = (lastAvg - currentAvg);
+                    stats['weights'] = `Past 7 Weights: ${currWeights} lbs.`;
                     stats['average'] = `7 Day Average: ${currentAvg} lbs.`;
                     let direction;
                     if (averageDifference <= 0) {
                         direction = "Gained";
+                        averageDifference = averageDifference * -1
                     } else {
                         direction = "Lost";
                     }

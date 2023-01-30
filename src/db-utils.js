@@ -3,8 +3,8 @@ import {
     DB_LOCATION,
     CREATE_USER_WEIGHTS_TABLE,
     INSERT_USER_WEIGHTS_TABLE,
-    SELECT_USER_WEIGHTS_TABLE,
-    SELECT_USER_BIWEEKLY_AVERAGE,
+    SELECT_CURRENT_WEEK,
+    SELECT_LAST_WEEK,
 } from "./constants.js";
 
 const sqlite = sqlite3.verbose();
@@ -38,11 +38,20 @@ export function recordWeight(username, weight) {
 export async function weightStats(username) {
     return new Promise((res) => {
         const db = new sqlite.Database(DB_LOCATION);
+        
         db.serialize(() => {
-            db.all(SELECT_USER_BIWEEKLY_AVERAGE, username, (err, rows) => {
-                res(rows.map((row) => row.weight));
-                db.close();
+            const data = new Object()
+            db.all(SELECT_CURRENT_WEEK, username, (err, rows) => {
+                data['currWeights'] = rows.map((row) => row.weight);
+                
             });
+            db.all(SELECT_LAST_WEEK, username, (err, rows) => {
+                data['pastWeights'] = rows.map((row) => row.weight);
+                res(data);
+            });
+            db.close();
         });
+        
+        
     });
 }
