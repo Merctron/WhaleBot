@@ -6,10 +6,15 @@ export const CREATE_USER_WEIGHTS_TABLE =
 export const INSERT_USER_WEIGHTS_TABLE =
     "INSERT OR REPLACE INTO userweights(dateanduser, date, username, weight)" +
     " VALUES(?, ?, ?, ?)";
-export const SELECT_USER_WEIGHTS_TABLE =
-    "SELECT * FROM userweights WHERE username LIKE ? ORDER BY date DESC LIMIT 7";
-export const SELECT_USER_BIWEEKLY_AVERAGE =
-    "SELECT * FROM userweights WHERE username LIKE ? ORDER BY date DESC LIMIT 14";
+export const SELECT_CURRENT_WEEK =
+    "SELECT * FROM userweights WHERE username LIKE ? AND userweights.date " +
+    "BETWEEN strftime('%Y%m%d', date('now','-7 days')) AND " +
+    "strftime('%Y%m%d', date('now')) ORDER BY date DESC LIMIT 7";
+export const SELECT_LAST_WEEK =
+    "SELECT * FROM userweights WHERE username LIKE ? AND userweights.date " +
+    "BETWEEN strftime('%Y%m%d',date('now', '-14 days')) AND " +
+    "strftime('%Y%m%d',date('now', '-7 days')) ORDER BY date DESC LIMIT 7";
+
 // Command Labels
 export const HELP_CMD    = "help";
 export const INSPIRE_CMD = "inspire";

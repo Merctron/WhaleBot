@@ -42,31 +42,25 @@ export async function processMessage(msg) {
                 recordWeight(msg.author.username, args[0]);
                 return "I have recorded your progress friend.";
             case STATS_CMD:
-                const stats = new Object()
-                const pastWeights = await weightStats(msg.author.username);
-                const numberWeights = pastWeights.length;
-                const lastAvg = averageWeight(pastWeights.slice(-7));
-                const currentAvg = averageWeight(pastWeights.slice(0,7));
-                const averageDifference = (lastAvg - currentAvg).toPrecision(5);
-                if (numberWeights <= 7){
-                    stats['weights'] = `Past ${numberWeights} Weights: ${pastWeights.slice(0,7)} lbs.`;
-                    stats['average'] = `${numberWeights} Day Average: ${currentAvg} lbs.`;
+                const stats = new Object();
+                const { currWeights, pastWeights } = await weightStats(msg.author.username);
+                const numWeights = currWeights.length;
+                const currentAvg = numWeights === 0 ? 0 : averageWeight(currWeights);
+
+                if (pastWeights.length === 0){
+                    stats['weights'] = `Past ${numWeights} Weights: ${currWeights.slice(0,7)} lbs.`;
+                    stats['average'] = `${numWeights} Day Average: ${currentAvg} lbs.`;
                 }
-                else if (7 < numberWeights & numberWeights < 14){
-                    stats['weights'] = `Past 7 Weights: ${pastWeights.slice(0,7)} lbs.`;
+                else {
+                    const lastAvg = averageWeight(pastWeights);
+                    const avgDiff = (lastAvg - currentAvg);
+                    const isGain = avgDiff <= 0;
+
+                    stats['weights'] = `Past 7 Weights: ${currWeights} lbs.`;
                     stats['average'] = `7 Day Average: ${currentAvg} lbs.`;
-                }else{
-                    stats['weights'] = `Past 7 Weights: ${pastWeights.slice(0,7)} lbs.`;
-                    stats['average'] = `7 Day Average: ${currentAvg} lbs.`;
-                    let direction;
-                    if (averageDifference <= 0) {
-                        direction = "Gained";
-                    } else {
-                        direction = "Lost";
-                    }
-                    stats['bi_average'] = `Average Difference: ${direction} ${averageDifference} lbs.`;
+                    stats['bi_average'] = `Average Difference: ${isGain ? "Gained" : "Lost"} ${Math.abs(avgDiff).toPrecision(5)} lbs.`;
                 }
-                
+
                 return statsToString(stats);
         }
 
