@@ -14,6 +14,9 @@ export const SELECT_LAST_WEEK =
     "SELECT * FROM userweights WHERE username LIKE ? AND userweights.date " +
     "BETWEEN strftime('%Y%m%d',date('now', '-14 days')) AND " +
     "strftime('%Y%m%d',date('now', '-7 days')) ORDER BY date DESC LIMIT 7";
+export const SELECT_TABLE =
+    "SELECT * FROM userweights";
+
 
 // Command Labels
 export const HELP_CMD    = "help";
@@ -21,6 +24,7 @@ export const INSPIRE_CMD = "inspire";
 export const DEPRESS_CMD = "depress";
 export const RECORD_WEIGHT_CMD = "recordWeight";
 export const STATS_CMD = "stats";
+export const ISSUED_CMD = "issued";
 
 // Command Data
 export const INSPIRE_QUOTES = [
