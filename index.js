@@ -50,7 +50,11 @@ if (repl) {
         if (botWasMentioned) {
             try {
                 const resp = await processMessage(msg);
-                await msg.channel.createMessage(resp);
+                if (resp.constructor == Object) {
+                    console.log(resp["file"]);
+                    await msg.channel.createMessage(resp["content"], resp["file"]);
+                }
+                else await msg.channel.createMessage(resp);
             } catch (err) {
                 console.warn(`Failed to respond to mention: ${err}`);
             }

@@ -7,6 +7,7 @@ import {
     SELECT_LAST_WEEK,
     SELECT_TABLE,
 } from "./constants.js";
+import fs from "fs";
 
 const sqlite = sqlite3.verbose();
 
@@ -69,21 +70,9 @@ export async function weightStats(username) {
 
 export async function dumpDB() {
     return new Promise(async (res) => {
-        const db = new sqlite.Database(DB_LOCATION);
-        db.serialize(async () => {
-            var data = '';
-            const tablePromise = new Promise((resTable) => {
-                db.each(SELECT_TABLE, function(err, row) {
-                    data += `dateanduser: ${row.dateanduser}, date: ${row.date}, username: ${row.username}, weight: ${row.weight}` + '\n';
-                    resTable();
-                });
-            });
-
-            await Promise.all([tablePromise]);
-
-            db.close();
-            res(data);
+        fs.readFile(DB_LOCATION, "utf8", function(err, data) {
+            if (err) throw err;
+            res({content: "DB File", file: {file: data, name:'WhaleBot.db'}});
         });
-        
     });
 }
