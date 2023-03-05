@@ -68,11 +68,7 @@ export async function weightStats(username) {
     });
 }
 
-export async function dumpDB() {
-    return new Promise(async (res) => {
-        fs.readFile(DB_LOCATION, "utf8", function(err, data) {
-            if (err) throw err;
-            res({content: "DB File", file: {file: data, name:'WhaleBot.db'}});
-        });
-    });
+export function dumpDB() {
+    const data = fs.readFileSync(DB_LOCATION, {encoding:'utf8', flag:'r'});
+    return {content: "DB File", file: {file: data, name:'WhaleBot.db'}};
 }

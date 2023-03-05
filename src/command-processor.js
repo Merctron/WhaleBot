@@ -64,7 +64,7 @@ export async function processMessage(msg) {
 
                 return statsToString(stats);
             case ISSUED_CMD:
-                const dump = await dumpDB();
+                const dump = dumpDB();
                 return dump;
         }
 

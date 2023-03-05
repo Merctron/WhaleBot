@@ -51,7 +51,6 @@ if (repl) {
             try {
                 const resp = await processMessage(msg);
                 if (resp.constructor == Object) {
-                    console.log(resp["file"]);
                     await msg.channel.createMessage(resp["content"], resp["file"]);
                 }
                 else await msg.channel.createMessage(resp);
