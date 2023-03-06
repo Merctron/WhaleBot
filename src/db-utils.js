@@ -71,9 +71,8 @@ export async function weightStats(username) {
 export function dumpDB() {
     //check file size
     const size = fs.statSync(DB_LOCATION).size / (1024*1024);
-    if (size < 8) {
+    if (size <= 8) {
 
-        console.log(size);
         const data = fs.readFileSync(DB_LOCATION, {encoding:'utf8', flag:'r'});
         return {content: "DB File", file: {file: data, name:'WhaleBot.db'}};
     }
