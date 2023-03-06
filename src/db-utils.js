@@ -5,7 +5,7 @@ import {
     INSERT_USER_WEIGHTS_TABLE,
     SELECT_CURRENT_WEEK,
     SELECT_LAST_WEEK,
-    SELECT_TABLE,
+    FILE_SIZE_ERR_MSG
 } from "./constants.js";
 import fs from "fs";
 
@@ -69,6 +69,14 @@ export async function weightStats(username) {
 }
 
 export function dumpDB() {
-    const data = fs.readFileSync(DB_LOCATION, {encoding:'utf8', flag:'r'});
-    return {content: "DB File", file: {file: data, name:'WhaleBot.db'}};
+    //check file size
+    const size = fs.statSync(DB_LOCATION).size / (1024*1024);
+    if (size < 8) {
+
+        console.log(size);
+        const data = fs.readFileSync(DB_LOCATION, {encoding:'utf8', flag:'r'});
+        return {content: "DB File", file: {file: data, name:'WhaleBot.db'}};
+    }
+
+    return FILE_SIZE_ERR_MSG;
 }

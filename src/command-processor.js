@@ -9,7 +9,7 @@ import {
     DEPRESS_QUOTES,
     HELP_MSG,
     ERR_MSG,
-    ISSUED_CMD
+    DUMP_DB_CMD
 } from "./constants.js";
 
 function averageWeight(weights) {
@@ -63,7 +63,7 @@ export async function processMessage(msg) {
                 }
 
                 return statsToString(stats);
-            case ISSUED_CMD:
+            case DUMP_DB_CMD:
                 const dump = dumpDB();
                 return dump;
         }

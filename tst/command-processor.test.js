@@ -1,6 +1,6 @@
 import { processMessage } from "../src/command-processor.js";
 import fs from "fs";
-import { HELP_CMD, HELP_MSG, ISSUED_CMD, DB_LOCATION, } from "../src/constants.js";
+import { HELP_CMD, HELP_MSG, DUMP_DB_CMD, DB_LOCATION, } from "../src/constants.js";
 
 test("Processes 'help' command", async () => {
   expect(await processMessage({
@@ -9,11 +9,11 @@ test("Processes 'help' command", async () => {
   })).toBe(HELP_MSG);
 });
 
-test("Process 'issued' command", async () => {
+test("Process 'dumpDB' command", async () => {
 
   const data = fs.readFileSync(DB_LOCATION, {encoding:'utf8', flag:'r'});
   const fileObject = await processMessage({
-    content: `@WhaleBot ${ISSUED_CMD}`,
+    content: `@WhaleBot ${DUMP_DB_CMD}`,
     author: { username: "Liz" },
   })
 

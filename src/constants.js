@@ -14,8 +14,6 @@ export const SELECT_LAST_WEEK =
     "SELECT * FROM userweights WHERE username LIKE ? AND userweights.date " +
     "BETWEEN strftime('%Y%m%d',date('now', '-14 days')) AND " +
     "strftime('%Y%m%d',date('now', '-7 days')) ORDER BY date DESC LIMIT 7";
-export const SELECT_TABLE =
-    "SELECT * FROM userweights";
 
 
 // Command Labels
@@ -24,7 +22,7 @@ export const INSPIRE_CMD = "inspire";
 export const DEPRESS_CMD = "depress";
 export const RECORD_WEIGHT_CMD = "recordWeight";
 export const STATS_CMD = "stats";
-export const ISSUED_CMD = "issued";
+export const DUMP_DB_CMD = "dumpDB";
 
 // Command Data
 export const INSPIRE_QUOTES = [
@@ -50,6 +48,8 @@ export const HELP_MSG = "Hi I'm Charlie. I'm a work in progress. " +
                         "@Whalebot recordWeight <WEIGHT>'\n" +
                         "@Whalebot stats'\n" +
                         "@Whalebot inspire'\n" +
+                        "@Whalebot dumpDB'\n" +
                         "@WhaleBot help'";
 export const ERR_MSG = "I could not understand you, but keep trying. " +
                        "Maybe type '@WhaleBot help'. You are amazing!";
+export const FILE_SIZE_ERR_MSG = "DB file is too big to retreive";
