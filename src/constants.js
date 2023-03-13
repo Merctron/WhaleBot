@@ -1,5 +1,5 @@
 // DB Constants
-export const DB_LOCATION = `${process.env.HOME}/.WhaleBott.db`;
+export const DB_LOCATION = `${process.env.HOME}/.WhaleBot.db`;
 export const CREATE_USER_WEIGHTS_TABLE =
     "CREATE TABLE IF NOT EXISTS userweights" + 
     " (dateanduser TEXT PRIMARY KEY, date TEXT, username TEXT, weight REAL)";
