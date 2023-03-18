@@ -5,7 +5,9 @@ import {
     INSERT_USER_WEIGHTS_TABLE,
     SELECT_CURRENT_WEEK,
     SELECT_LAST_WEEK,
+    FILE_SIZE_ERR_MSG
 } from "./constants.js";
+import fs from "fs";
 
 const sqlite = sqlite3.verbose();
 
@@ -64,4 +66,16 @@ export async function weightStats(username) {
             res(data);
         });
     });
+}
+
+export function dumpDB() {
+    //check file size
+    const size = fs.statSync(DB_LOCATION).size / (1024*1024);
+    if (size <= 8) {
+
+        const data = fs.readFileSync(DB_LOCATION, {encoding:'utf8', flag:'r'});
+        return {content: "DB File", file: {file: data, name:'WhaleBot.db'}};
+    }
+
+    return FILE_SIZE_ERR_MSG;
 }

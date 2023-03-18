@@ -1,4 +1,4 @@
-import { recordWeight, weightStats } from "./db-utils.js";
+import { recordWeight, weightStats, dumpDB } from "./db-utils.js";
 import {
     HELP_CMD,
     INSPIRE_CMD,
@@ -9,6 +9,7 @@ import {
     DEPRESS_QUOTES,
     HELP_MSG,
     ERR_MSG,
+    DUMP_DB_CMD
 } from "./constants.js";
 
 function averageWeight(weights) {
@@ -62,6 +63,9 @@ export async function processMessage(msg) {
                 }
 
                 return statsToString(stats);
+            case DUMP_DB_CMD:
+                const dump = dumpDB();
+                return dump;
         }
 
         return ERR_MSG;
