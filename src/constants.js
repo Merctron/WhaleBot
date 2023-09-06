@@ -70,6 +70,11 @@ export const HELP_MSG = "Hi I'm Charlie. I'm a work in progress. " +
                         "@Whalebot stats'\n" +
                         "@Whalebot inspire'\n" +
                         "@Whalebot dumpDB'\n" +
+                        "@Whalebot setGoal <GOAL>'\n" +
+                        "@Whalebot getGoal'\n" +
+                        "@Whalebot updateGoal <GOAL>'\n" +
+                        "@Whalebot deleteGoal'\n" +
+                        "@Whalebot getAllGoals'\n" +
                         "@WhaleBot help'";
 export const ERR_MSG = "I could not understand you, but keep trying. " +
                        "Maybe type '@WhaleBot help'. You are amazing!";
