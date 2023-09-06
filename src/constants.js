@@ -15,6 +15,22 @@ export const SELECT_LAST_WEEK =
     "BETWEEN strftime('%Y%m%d',date('now', '-14 days')) AND " +
     "strftime('%Y%m%d',date('now', '-7 days')) ORDER BY date DESC LIMIT 7";
 
+// add user weight goals to table
+export const CREATE_USER_GOALS_TABLE = 
+    "CREATE TABLE IF NOT EXISTS usergoals" +
+    " (username TEXT PRIMARY KEY, goal REAL)";
+export const INSERT_USER_GOALS_TABLE =
+    "INSERT OR REPLACE INTO usergoals(username, goal)" +
+    " VALUES(?, ?)";
+export const SELECT_USER_GOALS_TABLE =
+    "SELECT * FROM usergoals WHERE username LIKE ?";
+export const UPDATE_USER_GOALS_TABLE =
+    "UPDATE usergoals SET goal = ? WHERE username LIKE ?";
+export const DELETE_USER_GOALS_TABLE =  
+    "DELETE FROM usergoals WHERE username LIKE ?";
+export const SELECT_ALL_USER_GOALS_TABLE =
+    "SELECT * FROM usergoals";
+
 
 // Command Labels
 export const HELP_CMD    = "help";
@@ -23,6 +39,11 @@ export const DEPRESS_CMD = "depress";
 export const RECORD_WEIGHT_CMD = "recordWeight";
 export const STATS_CMD = "stats";
 export const DUMP_DB_CMD = "dumpDB";
+export const SET_GOAL_CMD = "setGoal";
+export const GET_GOAL_CMD = "getGoal";
+export const UPDATE_GOAL_CMD = "updateGoal";
+export const DELETE_GOAL_CMD = "deleteGoal";
+export const GET_ALL_GOALS_CMD = "getAllGoals";
 
 // Command Data
 export const INSPIRE_QUOTES = [
