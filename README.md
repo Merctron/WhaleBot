@@ -12,6 +12,11 @@ WhaleBot supports the following commands:
 @Whalebot inspire
 @Whalebot help
 @Whalebot dumpDB
+@Whalebot setGoal
+@whalebot getGoal
+@whalebot updateGoal
+@whalebot deleteGoal
+@whalebot getAllGoals
 ```
 
 You can also run Whale bot in REPL mode (if you want to mess with it locally or test during development) like so:
