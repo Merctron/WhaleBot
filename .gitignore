@@ -105,3 +105,9 @@ dist
 
 #ignore mac system files
 .DS_Store
+
+# CDK
+cdk/cdk.out
+cdk/*.js
+cdk/*.d.ts
+!cdk/jest.config.js

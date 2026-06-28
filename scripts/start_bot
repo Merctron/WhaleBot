@@ -7,7 +7,7 @@ export NVM_DIR="$HOME/.nvm"
 sudo chmod -R 777 $HOME/WhaleBot
 
 # Configure the version of Node.js to use
-nvm use 16
+nvm use 20
 
 # Make sure pm2 is installed to manage the bot process
 npm install pm2@latest -g

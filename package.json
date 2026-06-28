@@ -7,7 +7,12 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node index.js --repl",
-    "test": "node --experimental-vm-modules ./node_modules/.bin/jest"
+    "test": "node --experimental-vm-modules ./node_modules/.bin/jest",
+    "cdk": "cd cdk && npx cdk",
+    "cdk:deploy": "cd cdk && npx cdk deploy --require-approval never",
+    "cdk:diff": "cd cdk && npx cdk diff",
+    "cdk:synth": "cd cdk && npx cdk synth",
+    "cdk:ls": "cd cdk && npx cdk ls"
   },
   "repository": {
     "type": "git",
