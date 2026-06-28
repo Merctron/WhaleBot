@@ -106,6 +106,9 @@ export class WhaleBotStack extends cdk.Stack {
       keyPair,
     });
 
+    // Pin the logical ID so CDK never replaces the instance due to stack changes
+    (instance.node.defaultChild as cdk.CfnResource).overrideLogicalId('WhaleBotInstance');
+
     cdk.Tags.of(instance).add('Name', 'WhaleBot');
 
     // CodeDeploy application + deployment group targeting the instance by tag
