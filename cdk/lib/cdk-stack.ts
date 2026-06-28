@@ -63,7 +63,9 @@ export class WhaleBotStack extends cdk.Stack {
     const userData = ec2.UserData.forLinux();
     userData.addCommands(
       // Install dependencies
-      'yum install -y ruby wget git',
+      'yum install -y ruby wget git cronie',
+      'systemctl start crond',
+      'systemctl enable crond',
 
       // Install CodeDeploy agent
       'cd /tmp',
@@ -83,8 +85,9 @@ export class WhaleBotStack extends cdk.Stack {
       'echo "# Add: export WHALE_BOT_TOKEN=your_token_here" > /home/ec2-user/credentials/WhaleBot.sh',
       'chown ec2-user:ec2-user /home/ec2-user/credentials/WhaleBot.sh',
 
-      // Set up daily DB backup cron for ec2-user
-      `(crontab -u ec2-user -l 2>/dev/null; echo "0 12 * * * aws s3 cp ~/.WhaleBot.db s3://${backupBucket.bucketName}/$(uuidgen).db") | crontab -u ec2-user -`,
+      // Set up daily DB backup cron for ec2-user — single quotes around the cron line prevent
+      // $(uuidgen) from being evaluated at UserData time; it evaluates at cron runtime instead
+      `(crontab -u ec2-user -l 2>/dev/null; echo '0 12 * * * aws s3 cp ~/.WhaleBot.db s3://${backupBucket.bucketName}/$(uuidgen).db') | crontab -u ec2-user -`,
     );
 
     // Key pair — private key stored automatically in Secrets Manager by CDK
@@ -101,7 +104,6 @@ export class WhaleBotStack extends cdk.Stack {
       securityGroup: sg,
       userData,
       keyPair,
-      userDataCausesReplacement: true,
     });
 
     cdk.Tags.of(instance).add('Name', 'WhaleBot');
